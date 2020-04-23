@@ -20,6 +20,8 @@
 package com.aliyun.odps.ogg.handler.datahub.modle;
 
 
+import lombok.Data;
+
 import java.util.Map;
 
 /**
@@ -27,6 +29,7 @@ import java.util.Map;
  * @author lyf0429
  * @date 16/5/25
  */
+@Data
 public class DirtyRecordInfo {
     private String oracleTable;
     private String topicName;
@@ -35,51 +38,51 @@ public class DirtyRecordInfo {
     private String errorTime;
     private Map<String, String> record;
 
-    public String getOracleTable() {
-        return oracleTable;
-    }
-
-    public void setOracleTable(String oracleTable) {
-        this.oracleTable = oracleTable;
-    }
-
-    public String getTopicName() {
-        return topicName;
-    }
-
-    public void setTopicName(String topicName) {
-        this.topicName = topicName;
-    }
-
-    public String getShardId() {
-        return shardId;
-    }
-
-    public void setShardId(String shardId) {
-        this.shardId = shardId;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public Map<String, String> getRecord() {
-        return record;
-    }
-
-    public void setRecord(Map<String, String> record) {
-        this.record = record;
-    }
-
-    public String getErrorTime() {
-        return errorTime;
-    }
-
-    public void setErrorTime(String errorTime) {
-        this.errorTime = errorTime;
-    }
+//    public String getOracleTable() {
+//        return oracleTable;
+//    }
+//
+//    public void setOracleTable(String oracleTable) {
+//        this.oracleTable = oracleTable;
+//    }
+//
+//    public String getTopicName() {
+//        return topicName;
+//    }
+//
+//    public void setTopicName(String topicName) {
+//        this.topicName = topicName;
+//    }
+//
+//    public String getShardId() {
+//        return shardId;
+//    }
+//
+//    public void setShardId(String shardId) {
+//        this.shardId = shardId;
+//    }
+//
+//    public String getErrorMessage() {
+//        return errorMessage;
+//    }
+//
+//    public void setErrorMessage(String errorMessage) {
+//        this.errorMessage = errorMessage;
+//    }
+//
+//    public Map<String, String> getRecord() {
+//        return record;
+//    }
+//
+//    public void setRecord(Map<String, String> record) {
+//        this.record = record;
+//    }
+//
+//    public String getErrorTime() {
+//        return errorTime;
+//    }
+//
+//    public void setErrorTime(String errorTime) {
+//        this.errorTime = errorTime;
+//    }
 }
