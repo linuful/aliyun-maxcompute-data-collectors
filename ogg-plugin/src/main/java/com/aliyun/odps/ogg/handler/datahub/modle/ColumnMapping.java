@@ -37,6 +37,8 @@ public class ColumnMapping {
     private boolean isDateFormat = true;
     private boolean isDefaultCharset = true;
 
+    private boolean isOracleDate = false;
+
     @JsonIgnore private SimpleDateFormat simpleDateFormat;
     private String dateFormat;
 
@@ -111,5 +113,13 @@ public class ColumnMapping {
 
     public void setDefaultCharset(boolean defaultCharset) {
         isDefaultCharset = defaultCharset;
+    }
+
+    public boolean isOracleDate() {
+        return isOracleDate;
+    }
+
+    public void setIsOracleDate(boolean oracleDate) {
+        isOracleDate = oracleDate;
     }
 }

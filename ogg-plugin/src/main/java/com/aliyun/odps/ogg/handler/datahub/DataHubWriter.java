@@ -36,7 +36,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.crypto.Data;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class DataHubWriter {
     private static final Logger logger = LoggerFactory.getLogger(DataHubWriter.class);
@@ -100,6 +105,7 @@ public class DataHubWriter {
             }
             freshShardList(tableMapping);
             recordCache.put(entry.getKey(), new ArrayList<RecordEntry>());
+            //recordCache.put(entry.getKey(), Collections.synchronizedList( new ArrayList<RecordEntry>()));
         }
     }
 
@@ -204,7 +210,7 @@ public class DataHubWriter {
 
         String shardId = tableMapping.getShardId();
         for (RecordEntry recordEntry : recordEntries) {
-            recordEntry.setShardId(shardId);
+                recordEntry.setShardId(shardId);
         }
     }
 
@@ -222,6 +228,7 @@ public class DataHubWriter {
         }
 
         initRecordShardIds(oracleFullTableName, recordEntries);
+
         TableMapping tableMapping = this.configure.getTableMapping(oracleFullTableName);
 
         int retryCount = 0;
@@ -341,4 +348,5 @@ public class DataHubWriter {
     public DatahubClient getDataHubClient() {
         return client;
     }
+
 }

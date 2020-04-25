@@ -66,7 +66,6 @@ public class RecordBuilder {
 
     private RecordBuilder(Configure configure) {
         this.configure = configure;
-
         if (!Charset.isSupported(configure.getCharsetName())) {
             throw new InvalidParameterException("Invalid charsetName: " + configure.getCharsetName());
         }
@@ -177,24 +176,25 @@ public class RecordBuilder {
             logger.info("after {}, before {}", afterValue, beforeValue);
 
             String dest = columnMapping.getDest();
+            boolean isOracleDate = columnMapping.isOracleDate();
             if (StringUtils.isNotBlank(dest)) {
                 if (columnMapping.isKeyColumn()) {
                     if (dsColumn.getAfter() == null) {
-                        setTupleData(recordData, recordSchema.getField(dest), beforeValue,
+                        setTupleData(recordData, recordSchema.getField(dest), beforeValue,isOracleDate,
                                 columnMapping.isDateFormat(), columnMapping.getSimpleDateFormat());
                     } else {
-                        setTupleData(recordData, recordSchema.getField(dest), afterValue,
+                        setTupleData(recordData, recordSchema.getField(dest), afterValue,isOracleDate,
                                 columnMapping.isDateFormat(), columnMapping.getSimpleDateFormat());
                     }
                 } else {
-                    setTupleData(recordData, recordSchema.getField(dest), afterValue,
+                    setTupleData(recordData, recordSchema.getField(dest), afterValue,isOracleDate,
                             columnMapping.isDateFormat(), columnMapping.getSimpleDateFormat());
                 }
             }
 
             String destOld = columnMapping.getDestOld();
             if (StringUtils.isNotBlank(destOld)) {
-                setTupleData(recordData, recordSchema.getField(destOld), beforeValue,
+                setTupleData(recordData, recordSchema.getField(destOld), beforeValue,isOracleDate,
                         columnMapping.isDateFormat(), columnMapping.getSimpleDateFormat());
             }
 
@@ -248,9 +248,12 @@ public class RecordBuilder {
         recordEntry.addAttribute("opType", opType);
     }
 
-    private void setTupleData(TupleRecordData recordData, Field field, String val, boolean isDateFormat, SimpleDateFormat format) {
+    private void setTupleData(TupleRecordData recordData, Field field, String val, boolean isOracleDate,boolean isDateFormat, SimpleDateFormat format) {
         if (val == null || val.isEmpty() || field == null || "null".equalsIgnoreCase(val)) {
             return;
+        }
+        if(isOracleDate){
+            val = convertStrToSimpleTimeStamp(val);
         }
         switch (field.getType()) {
             case STRING:
@@ -311,5 +314,21 @@ public class RecordBuilder {
         long milliseconds = ts.getTime();
         int nanos = ts.getNanos();
         return milliseconds * 1000 + nanos % 1000000 / 1000;
+    }
+
+    // convert time string like yyyy-mm-dd:hh:mm:ss[.fffffffff] to yyyy-mm-dd hh:mm:ss[.fffffffff]
+    private String convertStrToSimpleTimeStamp(String timeStr) {
+        if (StringUtils.isBlank(timeStr)) {
+            return null;
+        }
+        // convert yyyy-mm-dd:hh:mm:ss to yyyy-mm-dd hh:mm:ss
+        StringBuilder sb = new StringBuilder(timeStr);
+        if (sb.length() < 11) {
+            logger.error("BuildRecord failed, convert timeStr to timestamp failed, invalid timeStr, timeStr: {}", timeStr);
+            throw new RuntimeException("convert timeStr to timestamp failed, invalid timeStr, timeStr: " + timeStr);
+        }
+        sb.setCharAt(10, ' ');
+        timeStr = sb.toString();
+        return timeStr;
     }
 }

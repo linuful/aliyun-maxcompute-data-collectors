@@ -38,6 +38,8 @@
     <!-- 上传到datahub, 一批的最多纪录数, 可选, 默认1000-->
     <batchSize>1000</batchSize>
 
+    <timeOut>10000</timeOut>
+
     <!-- 脏数据是否继续, 可选, 默认false-->
     <dirtyDataContinue>false</dirtyDataContinue>
 
@@ -83,6 +85,7 @@
                 isShardColumn: 是否作为shard的hashkey, 可选, 默认为false, 可以被shardId覆盖
                 isDateFormat: timestamp字段是否采用DateFormat格式转换, 默认true. 如果是false, 源端数据必须是long
                 dateFormat: timestamp字段的转换格式, 不填就用默认值
+                isOracleDate: 是否Oracle DATE类E型，对DATE类型进行
                 -->
                 <column src="id" dest="id" isShardColumn="false" isDateFormat="true"/>
                 <column src="name" dest="name" isShardColumn="true"/>
@@ -91,6 +94,7 @@
                 <column src="comments" dest="comments"/>
                 <column src="sex" dest="sex"/>
                 <column src="temp" dest="temp" destOld="temp1"/>
+                <column src="gpstime" dest="gpstime" isOracleDate="true"/>
             </columnMapping>
         </mapping>
     </mappings>

@@ -62,6 +62,11 @@ public class ConfigureReader {
             configure.setBatchSize(Integer.parseInt(elementText));
         }
 
+        elementText = root.elementTextTrim("timeOut");
+        if (StringUtils.isNotBlank(elementText)) {
+            configure.setTimeOut(Integer.parseInt(elementText));
+        }
+
         elementText = root.elementTextTrim("dirtyDataContinue");
         if (StringUtils.isNotBlank(elementText)) {
             configure.setDirtyDataContinue(Boolean.parseBoolean(elementText));
@@ -323,6 +328,16 @@ public class ConfigureReader {
                 if (StringUtils.isNotBlank(charset)) {
                     columnMapping.setDefaultCharset(Boolean.parseBoolean(isDateFormat));
                 }
+
+
+                String isOracleDate = columnElement.attributeValue("isOracleDate");
+                if (StringUtils.isNotBlank(isOracleDate) && Boolean.TRUE
+                        .equals(Boolean.valueOf(isOracleDate))) {
+                    columnMapping.setIsOracleDate(true);
+                } else {
+                    columnMapping.setIsOracleDate(false);
+                }
+
             }
         }
 

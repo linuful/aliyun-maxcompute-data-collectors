@@ -123,19 +123,9 @@ public class DatahubHandler extends AbstractHandler {
         return status;
     }
 
-    //频繁事务会导致频繁的事务触发机制，需添加batch size控制
     @Override
     public Status transactionCommit(DsEvent e, DsTransaction tx) {
         Status status = super.transactionCommit(e, tx);
-//        try {
-//            DataHubWriter.instance().flushAll();
-//        } catch (Exception e1) {
-//            status = Status.ABEND;
-//            logger.error("Unable to deliver records", e1);
-//        }
-//        // save checkpoints
-//        HandlerInfoManager.instance().saveHandlerInfos();
-
         PluginStatictics.addTotalTxns();
         return status;
     }
@@ -157,7 +147,7 @@ public class DatahubHandler extends AbstractHandler {
     public void destroy() {
         logger.warn("Handler destroying...");
         super.destroy();
-        TimeoutHandler.close();
+//        TimeoutHandler.close();
     }
 
     public String getConfigureFileName() {

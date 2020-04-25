@@ -21,7 +21,6 @@ package com.aliyun.odps.ogg.handler.datahub;
 import com.aliyun.odps.ogg.handler.datahub.modle.Configure;
 import com.aliyun.odps.ogg.handler.datahub.modle.PluginStatictics;
 import com.google.common.base.Throwables;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +36,9 @@ public class TimeoutHandler {
     private final static Logger logger;
 
     static {
-        logger = LoggerFactory.getLogger(DatahubHandler.class);
-        timeout = 10000;    //default 10 seconds
-        corePoolSize = 3;   //default 3 threads
+        logger = LoggerFactory.getLogger(TimeoutHandler.class);
+        timeout = 10000;
+        corePoolSize = 3;
         timeoutHandler = new TimeoutHandler();
     }
 
@@ -61,10 +60,6 @@ public class TimeoutHandler {
 
     }
 
-//    public static void main(String[] args) throws InterruptedException {
-//        init(new Configure());
-//    }
-
     public static void close() {
         scheduled.shutdown();
         boolean isDone = false;
@@ -78,7 +73,6 @@ public class TimeoutHandler {
         } while (!isDone);
 
         logger.info("DataHubExecutor is closed success!");
-        //System.out.println("DataHubExecutor is closed success");
     }
 
 
@@ -89,11 +83,11 @@ public class TimeoutHandler {
         public void run() {
             try {
                 DataHubWriter.instance().flushAll();
+                // save checkpoints
+                HandlerInfoManager.instance().saveHandlerInfos();
             } catch (Exception e1) {
                 logger.error("Unable to deliver records", e1);
             }
-            // save checkpoints
-            HandlerInfoManager.instance().saveHandlerInfos();
             reportStatus();
         }
 
