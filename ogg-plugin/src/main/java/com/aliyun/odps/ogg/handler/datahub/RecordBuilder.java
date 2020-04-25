@@ -173,7 +173,7 @@ public class RecordBuilder {
                 afterValue = dsColumn.getAfter() == null ? null : new String(dsColumn.getAfterValue().getBytes(charset));
                 beforeValue = dsColumn.getBefore() == null ? null : new String(dsColumn.getBeforeValue().getBytes(charset));
             }
-            logger.info("after {}, before {}", afterValue, beforeValue);
+            logger.debug("after {}, before {}", afterValue, beforeValue);
 
             String dest = columnMapping.getDest();
             boolean isOracleDate = columnMapping.isOracleDate();
